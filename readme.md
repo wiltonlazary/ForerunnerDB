@@ -5,7 +5,14 @@ a UK registered company.
 > ForerunnerDB is used in live projects that serve millions of users a day, is production
 ready and battle tested in real-world applications.
 
-## Version 1.4.4
+ForerunnerDB receives no funding or third-party backing except from patrons like yourself.
+If you love ForerunnerDB and want to support its development, or if you use it in your own
+products please consider becoming a patron: [https://www.patreon.com/user?u=4443427](https://www.patreon.com/user?u=4443427)
+
+Community Support: [https://github.com/Irrelon/ForerunnerDB/issues](https://github.com/Irrelon/ForerunnerDB/issues)
+Commercial Support: [forerunnerdb@irrelon.com](mailto:forerunnerdb@irrelon.com)
+
+## Version 1.4.37
 
 [![npm version](https://badge.fury.io/js/forerunnerdb.svg)](https://www.npmjs.com/package/forerunnerdb)
 [![Security Scan](https://snyk.io/test/npm/forerunnerdb/badge.svg)](https://snyk.io/test/npm/forerunnerdb)
@@ -3196,7 +3203,9 @@ coll.truncate();
 ```
 
 ### change
-Emitted after all CRUD operations have completed.
+Emitted after *all* CRUD operations have completed. See "immediateChange" if you need to 
+know about every update operation as soon as it completes. For performance it is best to
+use "change" rather than "immediateChange" if you can.
 
 ```js
 var coll = db.collection("myCollection");
@@ -3216,7 +3225,9 @@ coll.insert({goo: true});
 Emitted after each CRUD operation has completed. This is different from the "change" event
 in that immediateChange is emitted without any debouncing. The debounced change event will
 only fire 100ms after all changes have finished. The immediateChange event will fire
-on all changes straight away.
+on all changes straight away so you will be informed of every update call as soon as it
+has happened. For performance, if you only need to run code after any change has occurred,
+use "change" instead of "immediateChange".
 
 ```js
 var coll = db.collection("myCollection");
@@ -5370,6 +5381,9 @@ ng-repeat
 
 When changes are made to the "myCollection" collection data, they will be
 automatically reflected in the angular view.
+
+ForerunnerDB will automatically un-bind when angular's $destroy event is
+fired on the scope that you pass to .ng().
 
 If you bind a ForerunnerDB-based data variable to an ng-model attribute you
 will have two-way data binding as ForerunnerDB will be automatically updated

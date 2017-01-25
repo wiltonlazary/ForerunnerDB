@@ -2803,9 +2803,7 @@ QUnit.test('Collection.primaryKey() :: Change primary key', function () {
 	base.dbUp();
 	
 	var coll = db.collection('test'),
-		data,
-		result,
-		i;
+		data;
 	
 	data = [{
 		amount: 1
@@ -2854,6 +2852,26 @@ QUnit.test("Collection.filter() :: Filter documents in a collection", function (
 	
 	strictEqual(result[0]._id, "2", "New data filter worked");
 	strictEqual(result[0].newData, true, "New data filter worked");
+	
+	base.dbDown();
+});
+
+QUnit.test("Collection.remove() :: Use $eq to identify a document by _id", function () {
+	base.dbUp();
+	base.dataUp();
+	
+	var before = user.findById("2");
+	
+	strictEqual(!before.friends, false, "Check item exists");
+	strictEqual(before.friends.length, 2, "Check for correct initial array length");
+	
+	var result = user.remove({
+		_id: {$eq: "2"}
+	});
+	
+	var after = user.findById("2");
+	
+	strictEqual(after, undefined, "Check the item no longer exists");
 	
 	base.dbDown();
 });
